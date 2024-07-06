@@ -8,6 +8,7 @@ import Map from '@/components/Map'
 import PageContainer from "@/components/PageContainer";
 import CardListContainer from "@/components/CardListContainer";
 import { PageTitle } from "@/components/PageTitle";
+import { CollectionSlug } from "payload";
 
 
 export default async function Work({ params }: { params: { slug: string } }) {
@@ -62,9 +63,20 @@ export default async function Work({ params }: { params: { slug: string } }) {
 }
 
 
-async function getPost(slug: string | null, collection: string, excludeWorkId?: number | null): Promise<WorkType[]> {
+async function getPost(slug: string | null, collection: CollectionSlug, excludeWorkId?: number | null): Promise<WorkType[]> {
 	const payload = await getPayloadHMR({ config: configPromise });
 	const where: any = {};
+
+	// Verificar se a coleção possui a propriedade slug
+	if (typeof collection === 'string' && collection !== 'works') {
+		// Coleções que não têm slug
+		// Neste caso, retornamos todos os documentos da coleção
+		const data = await payload.find({
+			collection: collection,
+		});
+
+		return data.docs as unknown as WorkType[];
+	}
 
 	if (excludeWorkId === undefined || excludeWorkId === null) {
 		where.slug = {
