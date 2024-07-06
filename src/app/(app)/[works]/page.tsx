@@ -7,8 +7,9 @@ import Loading from "./loading";
 import PageContainer from "@/components/PageContainer";
 import CardListContainer from "@/components/CardListContainer";
 import { PageTitle } from "@/components/PageTitle";
+import { CollectionSlug } from "payload";
 
-async function getPost(cat: string, collection: string): Promise<WorkType[] | WorkType[]> {
+async function getPost(cat: string, collection: CollectionSlug): Promise<WorkType[] | WorkType[]> {
 	const payload = await getPayloadHMR({ config: configPromise })
 	const posts = await payload.find({
 		collection: collection,

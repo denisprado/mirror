@@ -6,8 +6,9 @@ import { PageTitle } from "@/components/PageTitle";
 import { Product, Work } from "@/payload-types";
 import configPromise from '@payload-config';
 import { getPayloadHMR } from "@payloadcms/next/utilities";
+import { CollectionSlug } from "payload";
 
-export default async function ProductPage({ params }: { params: { slug: string } }) {
+export default async function ProductPage({ params }: { params: { slug: CollectionSlug } }) {
 	const allProducts = await getPost(params.slug, 'products');
 	return (
 		allProducts.map(async (product: any) => {
@@ -67,9 +68,20 @@ export default async function ProductPage({ params }: { params: { slug: string }
 }
 
 
-async function getPost(slug: string | null, collection: string, excludeProductId?: number | null): Promise<Product[]> {
+async function getPost(slug: string | null, collection: CollectionSlug, excludeProductId?: number | null): Promise<Product[]> {
 	const payload = await getPayloadHMR({ config: configPromise });
 	const where: any = {};
+
+	// Verificar se a coleção possui a propriedade slug
+	if (typeof collection === 'string' && collection !== 'works') {
+		// Coleções que não têm slug
+		// Neste caso, retornamos todos os documentos da coleção
+		const data = await payload.find({
+			collection: collection,
+		});
+
+		return data.docs as unknown as Product[];
+	}
 
 	if (excludeProductId === undefined || excludeProductId === null) {
 		where.slug = {
