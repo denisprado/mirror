@@ -12,12 +12,13 @@ const Card = ({ category, post }: { category?: string, post: Work | Product }) =
 	const src2 = `${src}?_=${Date.now()}`
 	const url = category ? category + '/' + post.slug! : isProduct(post) ? '/adquira/' + post.slug! : post.slug!
 
+	console.log("image", post)
 
 	return (
 		src! && <div className="flex flex-col col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 w-full">
 			<Link href={url} className=" flex flex-col gap-2">
 				<div className="w-full h-[300px] relative overflow-hidden rounded-3xl" key={post.id!}>
-					<Image priority src={src2!} alt={post.title!} className="rounded-3xl w-full h-full transform transition duration-500 hover:scale-105 opacity-95 hover:opacity-100" fill style={{ objectFit: 'cover' }}
+					<Image unoptimized priority src={src2!} alt={post.title!} className="rounded-3xl w-full h-full transform transition duration-500 hover:scale-105 opacity-95 hover:opacity-100" fill style={{ objectFit: 'cover' }}
 						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw">
 					</Image>
 				</div>
