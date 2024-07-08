@@ -13,7 +13,8 @@ export function getUrl(image: Media | number) {
   //   typeof image !== "number"
   //     ? `https://s3.amazonaws.com/` + "estelaluz" + "/" + image?.filename!
   //     : "/media/";
-  const src = typeof image !== "number" ? image?.url! : "/media/";
+  const src =
+    typeof image !== "number" ? image?.sizes?.thumbnail?.url! : "/media/";
   return src;
 }
 
